@@ -1,0 +1,208 @@
+import React, { useState } from "react";
+import "./Contact.css";
+import { FaFacebookF, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaYoutube, FaTiktok } from "react-icons/fa";
+import { API_URL } from "../config";
+
+export default function Contact() {
+	const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+	const [errors, setErrors] = useState({});
+	const [sent, setSent] = useState(false);
+	const [openFaq, setOpenFaq] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [serverError, setServerError] = useState(null);
+
+	const faqs = [
+		{ q: "Oferiți garanție?", a: "Da — oferim garanție pentru toate tractoarele." }
+	];
+
+	function handleChange(e) {
+		const { name, value } = e.target;
+		setForm((s) => ({ ...s, [name]: value }));
+	}
+
+	function validate() {
+		const err = {};
+		if (!form.name.trim()) err.name = "Completează numele.";
+		if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) err.email = "Introdu o adresă de email validă.";
+		if (!form.message.trim()) err.message = "Scrie un mesaj scurt.";
+		return err;
+	}
+
+	function handleSubmit(e) {
+		e.preventDefault();
+		const v = validate();
+		setErrors(v);
+		if (Object.keys(v).length === 0) {
+			setErrors({});
+			setServerError(null);
+			setLoading(true);
+			
+			(async () => {
+				try {
+					const res = await fetch(`${API_URL}/api/messages`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							name: form.name.trim(),
+							email: form.email.trim(),
+							phone: form.phone.trim(),
+							message: form.message.trim(),
+							source: "contact-page",
+						}),
+					});
+
+					const data = await res.json().catch(() => null);
+					if (!res.ok) {
+						const msg = (data && data.error) || `Server returned ${res.status}`;
+						setServerError(msg);
+						setLoading(false);
+						return;
+					}
+
+					setSent(true);
+					setForm({ name: "", email: "", phone: "", message: "" });
+					setTimeout(() => setSent(false), 6000);
+				} catch (err) {
+					console.error("Failed to send message", err);
+					setServerError("Nu am putut trimite mesajul. Încearcă din nou mai târziu.");
+				} finally {
+					setLoading(false);
+				}
+			})();
+		}
+	}
+
+	return (
+		<div className="contact-page container">
+			<header className="contact-hero">
+				<h1>Contactează HANWO România — Suntem aici pentru tine</h1>
+				<p className="lead">Ai o întrebare despre produse, service sau livrare? Trimite-ne un mesaj și îți răspundem rapid.</p>
+			</header>
+
+			<div className="contact-grid">
+				<aside className="contact-info">
+					<div className="info-card">
+						<div className="icon"><FaPhone /></div>
+						<div>
+							<h3>Telefon</h3>
+							<p><a href="tel:+40741220030">+40 741 220 030</a></p>
+							<p><a href="tel:+40759076654">+40 759 076 654</a></p>
+							<p><a href="tel:+40755458160">+40 755 458 160</a></p>
+						</div>
+					</div>
+
+					<div className="info-card">
+						<div className="icon"><FaEnvelope /></div>
+						<div>
+							<h3>Email</h3>
+							<p><a href="mailto:contact@hanwo.ro">agrorus.brend@gmail.com</a></p>
+						</div>
+					</div>
+
+					<div className="info-card">
+						<div className="icon"><FaMapMarkerAlt /></div>
+						<div>
+							<h3>Adresa</h3>
+							<p>Str. Principală, nr.151, sat Gara Milișăuți, Suceava</p>
+							<p>Principala nr. 179, Lungulețu 137280, Dâmbovița</p>
+						</div>
+					</div>
+
+					<div className="socials">
+						<a href="https://www.facebook.com/agrorus.ro/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF /></a>
+						<a href="https://www.instagram.com/agrorus.ro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
+						<a href="https://www.tiktok.com/@agrorus.ro?_r=1&_t=ZN-92LSLVkLO8k" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><FaTiktok /></a>
+						<a href="https://www.youtube.com/@agrorus_ro" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FaYoutube /></a>
+					</div>
+
+					<div className="faq-block">
+						<h3>Întrebări frecvente</h3>
+						<ul className="faq-list">
+							{faqs.map((f, i) => (
+								<li key={i} className={`faq-item ${openFaq === i ? "open" : ""}`}>
+									<button className="faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>{f.q}</button>
+									<div className="faq-a">{f.a}</div>
+								</li>
+							))}
+						</ul>
+					</div>
+				</aside>
+
+				<main className="contact-main">
+					<form className="contact-form" onSubmit={handleSubmit} noValidate>
+						<h2>Trimite-ne un mesaj</h2>
+						{sent && <div className="form-success">Mesaj trimis! Îți vom răspunde în curând.</div>}
+						{serverError && <div className="form-error">{serverError}</div>}
+
+						<label>
+							Nume
+							<input name="name" value={form.name} onChange={handleChange} />
+							{errors.name && <div className="error">{errors.name}</div>}
+						</label>
+
+						<label>
+							Email
+							<input name="email" value={form.email} onChange={handleChange} />
+							{errors.email && <div className="error">{errors.email}</div>}
+						</label>
+
+						<label>
+							Telefon (opțional)
+							<input name="phone" value={form.phone} onChange={handleChange} />
+						</label>
+
+						<label>
+							Mesaj
+							<textarea name="message" rows={5} value={form.message} onChange={handleChange} />
+							{errors.message && <div className="error">{errors.message}</div>}
+						</label>
+
+						<div className="form-actions">
+							<button type="submit" className="btn primary" disabled={loading}>
+								{loading ? "Se trimite..." : "Trimite mesaj"}
+							</button>
+							<button type="button" className="btn ghost" onClick={() => setForm({ name: "", email: "", phone: "", message: "" })} disabled={loading}>Resetează</button>
+						</div>
+					</form>
+
+					<div className="map-wrap">
+						<h3>Unde ne găsești</h3>
+						<div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+							<div style={{ flex: "1", minWidth: "300px" }}>
+								<h4 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>Str. Principală, nr.151, sat Gara Milișăuți, Suceava</h4>
+								<iframe
+									width="100%"
+									height="400"
+									frameBorder="0"
+									scrolling="no"
+									marginHeight={0}
+									marginWidth={0}
+									src="https://maps.google.com/maps?width=720&amp;height=600&amp;hl=en&amp;q=AGRORUS%20BRAND%20S.R.L.+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+									title="Hanwo Location Suceava"
+								/>
+							</div>
+							<div style={{ flex: "1", minWidth: "300px" }}>
+								<h4 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>Principala nr. 179, Lungulețu 137280, Dâmbovița</h4>
+								<iframe
+									width="100%"
+									height="400"
+									frameBorder="0"
+									scrolling="no"
+									marginHeight={0}
+									marginWidth={0}
+									src="https://maps.google.com/maps?width=720&amp;height=400&amp;hl=ro&amp;q=Principala%20nr.%20179,%20Lungule%C8%9Bu%20137280,%20D%C3%A2mbovi%C8%9Ba+(AGRORUS%20BRAND)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+									title="Hanwo Location Dâmbovița"
+								/>
+							</div>
+						</div>
+					</div>
+				</main>
+			</div>
+
+			<section className="contact-note">
+				<h4>Menține informațiile actualizate</h4>
+				<p>Ne asigurăm că datele de contact sunt actualizate. Dacă observi o informație incorectă, scrie-ne și o vom corecta imediat.</p>
+			</section>
+		</div>
+	);
+}

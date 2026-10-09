@@ -1,0 +1,329 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/* ---------- Header: poziționare și fundal ---------- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 249, 249, 0.95) 100%);
+  color: #111;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(196, 0, 23, 0.1);
+}
+
+/* Când începi scroll → devine complet ALB */
+.header.scrolled {
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  box-shadow: 0 8px 30px rgba(196, 0, 23, 0.12);
+  border-bottom: 1px solid rgba(196, 0, 23, 0.15);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 6%;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+/* Pentru ecrane foarte mari */
+@media (min-width: 1600px) {
+  .header-container {
+    padding: 15px 8%;
+  }
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  height: 55px;
+  width: auto;
+  display: block;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(196, 0, 23, 0.15));
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+/* NAVIGAȚIE PRINCIPALĂ */
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.nav ul li {
+  position: relative;
+}
+
+/* 🔥 Implicit: NEGRU */
+.nav ul li a,
+.nav ul li button,
+.nav ul li .products-btn {
+  text-decoration: none;
+  color: #111 !important;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: relative;
+}
+
+.nav ul li a:hover,
+.nav ul li button:hover {
+  color: #c40017 !important;
+  background: rgba(196, 0, 23, 0.05);
+  transform: translateY(-2px);
+}
+
+.nav ul li a.active {
+  color: #c40017 !important;
+  background: linear-gradient(135deg, rgba(196, 0, 23, 0.08) 0%, rgba(255, 77, 77, 0.08) 100%);
+  box-shadow: 0 2px 8px rgba(196, 0, 23, 0.1);
+}
+
+/* Linia roșie */
+.nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #c40017 0%, #ff4d4d 100%);
+  transition: width 0.3s ease;
+  border-radius: 3px 3px 0 0;
+}
+
+.nav ul li a:hover::after,
+.nav ul li a.active::after {
+  width: 80%;
+}
+
+/* ========== MEGA MENU ========== */
+.has-mega {
+  position: relative;
+}
+
+.has-mega .mega {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  transform: translateX(-12px) translateY(10px);
+  background: #ffffff;
+  color: #111;
+  padding: 18px 18px;
+  box-shadow: 0 12px 34px rgba(17, 17, 17, 0.08);
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
+  min-width: 340px;
+  max-width: 560px;
+  overflow: hidden;
+  z-index: 1100;
+}
+
+.has-mega .mega.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-12px) translateY(14px);
+  animation: fadeInMega 0.25s ease forwards;
+}
+
+@keyframes fadeInMega {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(14px);
+  }
+}
+
+.mega-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 260px;
+  max-width: 480px;
+  color: #111;
+}
+
+.mega-column {
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.18s ease;
+}
+
+.mega-column:hover {
+  background: rgba(196, 0, 23, 0.03);
+}
+
+.mega-column + .mega-column {
+  margin-top: 4px;
+}
+
+.mega-title {
+  font-size: 0.95rem;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  color: #111;
+}
+
+/* Mobile submenu */
+.mobile-sub {
+  display: none;
+}
+
+.mobile-sub.open {
+  display: block;
+  padding: 10px 0 0 0;
+}
+
+.mobile-cat {
+  padding: 8px 0;
+}
+
+.mobile-cat-name {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Toggle mobile */
+.menu-toggle {
+  display: none;
+  color: #111;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #c40017 0%, #a00012 100%);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(196, 0, 23, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1200;
+    position: relative;
+  }
+  
+  .menu-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(196, 0, 23, 0.4);
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 300px;
+    max-width: 85vw;
+    background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 80px 25px 30px 25px;
+    gap: 10px;
+    transition: right 0.35s cubic-bezier(.2,.9,.2,1);
+    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.15);
+    border-left: 3px solid #c40017;
+  }
+
+  .nav.open {
+    right: 0;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .nav ul li {
+    width: 100%;
+  }
+
+  .nav ul li a,
+  .nav ul li button,
+  .nav ul li .products-btn {
+    font-size: 1.05rem;
+    width: 100%;
+    padding: 14px 18px;
+    background: #fff;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    justify-content: flex-start;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+  }
+  
+  .nav ul li a:hover,
+  .nav ul li button:hover,
+  .nav ul li a.active {
+    background: linear-gradient(135deg, rgba(196, 0, 23, 0.05) 0%, rgba(255, 77, 77, 0.08) 100%);
+    border-color: #c40017;
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(196, 0, 23, 0.15);
+  }
+  
+  .nav ul li a::after {
+    display: none;
+  }
+
+  .has-mega .mega {
+    display: none;
+  }
+
+  .mobile-sub ul {
+    padding-left: 12px;
+    margin-top: 8px;
+  }
+  
+  .mobile-sub ul li a {
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    border-width: 1px;
+  }
+}
+
+/* Link activ */
+.active {
+  color: #c40017 !important;
+}

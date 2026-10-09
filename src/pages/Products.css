@@ -1,0 +1,158 @@
+.products-page {
+  padding: 120px 6%;
+  font-family: "Poppins", sans-serif;
+  background: #fafafa;
+}
+
+.products-page h1 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2rem;
+  color: #111;
+  font-weight: 600;
+}
+
+.category-section {
+  margin-bottom: 70px;
+  position: relative;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.category-header h2 {
+  color: #c40017;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.view-tractors-btn {
+  background: #c40017;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.25s ease;
+}
+
+.view-tractors-btn:hover {
+  background: #a80015;
+}
+
+/* ----------- GRID STRUCTURE ----------- */
+.slider-container {
+  position: relative;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  align-items: start;
+  padding: 8px 0;
+}
+
+.product-card,
+.see-more-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  padding: 12px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  padding: 6px;
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.product-card .price {
+  font-weight: 600;
+  color: #c40017;
+  margin: 6px 0;
+}
+
+.product-card .desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* ----------- "VEZI MAI MULT" CARD ----------- */
+.see-more-card {
+  background: #c40017;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.see-more-card:hover {
+  background: #a80015;
+}
+
+.grid-see-more {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 18px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #c40017;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ----------- RESPONSIVE ----------- */
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .product-card,
+  .see-more-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .products-page {
+    padding: 100px 4%;
+  }
+
+  .products-page h1 {
+    font-size: 1.6rem;
+  }
+
+  .category-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .product-card img {
+    height: 140px;
+  }
+}
